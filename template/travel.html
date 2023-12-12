@@ -31,121 +31,45 @@
 	      </div>
 	    </section>
 			<section class="ftco-section">
+
 	    	<div class="container">
 	    		<div class="row">
+
 	    			<div class="col-lg-8">
 	    				<div class="row">
+							{% for i in post %}
 	    					<div class="col-md-12">
 	    						<div class="blog-entry ftco-animate">
 	    							<a href="#" class="img" style="background-image: url(static/images/image_1.jpg);"></a>
 	    							<div class="text pt-2 mt-3">
-					          	<span class="category mb-1 d-block"><a href="#">Technology</a></span>
-				              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-				              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+					          	<span class="category mb-1 d-block"><a href="#">{{ i.category }}</a></span>
+				              <h3 class="mb-4"><a href="#">{{ i.title }}</a></h3>
+				              <p class="mb-4">{{ i.description }}</p>
 				              <div class="author mb-4 d-flex align-items-center">
-				            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
+				            		<a href="#" class="img" style="background-image: url({{i.image.url}});"></a>
 				            		<div class="ml-3 info">
 				            			<span>Written by</span>
-				            			<h3><a href="#">Dave Lewis</a>, <span>Nov 28, 2018</span></h3>
+				            			<h3><a href="#">{{i.author}}</a>, <span>{{i.created_at}</span></h3>
 				            		</div>
 				            	</div>
 				              <div class="meta-wrap d-md-flex align-items-center">
 				              	<div class="half order-md-last text-md-right">
 					              	<p class="meta">
-					              		<span><i class="icon-heart"></i>3</span>
-					              		<span><i class="icon-eye"></i>100</span>
-					              		<span><i class="icon-comment"></i>5</span>
-					              	</p>
-				              	</div>
-				              	<div class="half">
-					              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
-				              	</div>
-				              </div>
-				            </div>
-	    						</div>
-	    					</div>
 
-	    					<div class="col-md-12">
-	    						<div class="blog-entry ftco-animate">
-	    							<a href="#" class="img" style="background-image: url(static/images/image_2.jpg);"></a>
-	    							<div class="text pt-2 mt-3">
-					          	<span class="category mb-1 d-block"><a href="#">Technology</a></span>
-				              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-				              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-				              <div class="author mb-4 d-flex align-items-center">
-				            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-				            		<div class="ml-3 info">
-				            			<span>Written by</span>
-				            			<h3><a href="#">Dave Lewis</a>, <span>Nov 28, 2018</span></h3>
-				            		</div>
-				            	</div>
-				              <div class="meta-wrap d-md-flex align-items-center">
-				              	<div class="half order-md-last text-md-right">
-					              	<p class="meta">
-					              		<span><i class="icon-heart"></i>3</span>
-					              		<span><i class="icon-eye"></i>100</span>
-					              		<span><i class="icon-comment"></i>5</span>
-					              	</p>
-				              	</div>
-				              	<div class="half">
-					              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
-				              	</div>
-				              </div>
-				            </div>
-	    						</div>
-	    					</div>
+							{% if request.user in i.like_by.all %}
+		              		<span><a href="{% url 'dislike_post' i.id %}"> <i class="icon-heart"></i></a> {{i.like_by.count}}</span>
+							{% else  %}
+							<span><a href="{% url 'like_post' i.id %}"> <i class="icon-heart"></i></a> {{i.like_by.count}}</span>
+							  {% endif %}
+		              		<span><i class="icon-eye"></i>{{i.view_counter}}</span>
 
-	    					<div class="col-md-12">
-	    						<div class="blog-entry ftco-animate">
-	    							<a href="#" class="img" style="background-image: url(static/images/image_3.jpg);"></a>
-	    							<div class="text pt-2 mt-3">
-					          	<span class="category mb-1 d-block"><a href="#">Technology</a></span>
-				              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-				              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-				              <div class="author mb-4 d-flex align-items-center">
-				            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-				            		<div class="ml-3 info">
-				            			<span>Written by</span>
-				            			<h3><a href="#">Dave Lewis</a>, <span>Nov 28, 2018</span></h3>
-				            		</div>
-				            	</div>
-				              <div class="meta-wrap d-md-flex align-items-center">
-				              	<div class="half order-md-last text-md-right">
-					              	<p class="meta">
-					              		<span><i class="icon-heart"></i>3</span>
-					              		<span><i class="icon-eye"></i>100</span>
-					              		<span><i class="icon-comment"></i>5</span>
-					              	</p>
-				              	</div>
-				              	<div class="half">
-					              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
-				              	</div>
-				              </div>
-				            </div>
-	    						</div>
-	    					</div>
+							<span><a href="{% url 'homepage' %}"> <i class="icon-comment"></i></a>5</span>
+							{% if request.user.id == i.author.id %}
 
-	    					<div class="col-md-12">
-	    						<div class="blog-entry ftco-animate">
-	    							<a href="#" class="img" style="background-image: url(static/images/image_4.jpg);"></a>
-	    							<div class="text pt-2 mt-3">
-					          	<span class="category mb-1 d-block"><a href="#">Technology</a></span>
-				              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-				              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-				              <div class="author mb-4 d-flex align-items-center">
-				            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-				            		<div class="ml-3 info">
-				            			<span>Written by</span>
-				            			<h3><a href="#">Dave Lewis</a>, <span>Nov 28, 2018</span></h3>
-				            		</div>
-				            	</div>
-				              <div class="meta-wrap d-md-flex align-items-center">
-				              	<div class="half order-md-last text-md-right">
-					              	<p class="meta">
-					              		<span><i class="icon-heart"></i>3</span>
-					              		<span><i class="icon-eye"></i>100</span>
-					              		<span><i class="icon-comment"></i>5</span>
-					              	</p>
+							<span><a href="{% url 'update_post' i.id  %}">Edit</a></span>
+							{% else %}
+							{% endif %}
+		              						</p>
 				              	</div>
 				              	<div class="half">
 					              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
@@ -154,37 +78,8 @@
 				            </div>
 	    						</div>
 	    					</div>
-
-	    					<div class="col-md-12">
-	    						<div class="blog-entry ftco-animate">
-	    							<a href="#" class="img" style="background-image: url(static/images/image_5.jpg);"></a>
-	    							<div class="text pt-2 mt-3">
-					          	<span class="category mb-1 d-block"><a href="#">Technology</a></span>
-				              <h3 class="mb-4"><a href="#">The Newest Technology On This Year 2019</a></h3>
-				              <p class="mb-4">Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-				              <div class="author mb-4 d-flex align-items-center">
-				            		<a href="#" class="img" style="background-image: url(static/images/person_1.jpg);"></a>
-				            		<div class="ml-3 info">
-				            			<span>Written by</span>
-				            			<h3><a href="#">Dave Lewis</a>, <span>Nov 28, 2018</span></h3>
-				            		</div>
-				            	</div>
-				              <div class="meta-wrap d-md-flex align-items-center">
-				              	<div class="half order-md-last text-md-right">
-					              	<p class="meta">
-					              		<span><i class="icon-heart"></i>3</span>
-					              		<span><i class="icon-eye"></i>100</span>
-					              		<span><i class="icon-comment"></i>5</span>
-					              	</p>
-				              	</div>
-				              	<div class="half">
-					              	<p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Continue Reading</a></p>
-				              	</div>
-				              </div>
-				            </div>
-	    						</div>
-	    					</div>
-	    				</div>
+						</div>
+						{% end for %}
 	    				<div class="row mt-5">
 			          <div class="col">
 			            <div class="block-27">

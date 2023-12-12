@@ -29,8 +29,8 @@ def about(request):
     return render(request,'about.html')
 
 def travel(request):
-    post = Post.objects.all()
-    return render(request,'travel.html',context={'post':post})
+    travel_post = Post.objects.filter(category='travel')
+    return render(request,'travel.html',context={'post':travel_post})
 
 def fashion(request):
     return render(request,'fashion.html')
