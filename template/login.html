@@ -4,6 +4,7 @@
 <form method="post">
     <style>
     form {
+
     width: 900px;
     margin: 0 auto;
     padding-top: 30px;
@@ -11,10 +12,11 @@
 
 }
 </style>
-    {% csrf_token %}
+{% csrf_token %}
     {{form.as_p}}
+
     <button type="submit">Submit</button>
-    <a href="{% url 'reset_password' %}"> <button type="button" >Forgot.Password?</button></a>
+    <a href="{% url 'reset_password' %}"> <button type="button" >Forgot Password?</button></a>
 </form>
 
 {% if error %}

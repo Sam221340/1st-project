@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import UpdateView
 
 from Blog.forms import PostBlogForm, CommentForm
-from Blog.models import Post, PostComments
+from Blog.models import Post, PostComments, Category
 
 
 def homepage(request):
@@ -20,20 +20,25 @@ def homepage(request):
     return render(request,'homepage.html',context={'post':post})
 
 def photography(request):
-    return render(request,'photography.html')
+    post = Post.objects.all()
+    return render(request,'photography.html',context={'post':post})
 
 def contact(request):
+    # post = Post.objects.all()
     return render(request,'contact.html')
 
 def about(request):
     return render(request,'about.html')
 
 def travel(request):
-    travel_post = Post.objects.filter(category='travel')
-    return render(request,'travel.html',context={'post':travel_post})
+    # post = Post.objects.all()
+    # travel_category = Category.objects.get(name='Travel')
+    post = Post.objects.filter(category__name="Travel")
+    return render(request,'travel.html',context={'post':post})
 
 def fashion(request):
-    return render(request,'fashion.html')
+    post = Post.objects.filter(category__name="Fashion")
+    return render(request, 'travel.html', context={'post': post})
 
 
 
@@ -92,7 +97,7 @@ def dislike_post(request, pk):
 
 def post_detail(request, pk):
     form = CommentForm()
-    post_comment = PostComments.objects.filter(post=pkkkk)
+    post_comment = PostComments.objects.filter(post=pk)
 
     try:
         post = Post.objects.get(id=pk)
