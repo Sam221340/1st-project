@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+    "verify_email.apps.VerifyEmailConfig",
     'Blog',
-    'accounts'
+    'accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -130,3 +132,12 @@ MEDIA_ROOT = BASE_DIR/'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'rt23707@gmail.com'
+EMAIL_HOST_PASSWORD = 'exuknhdkfrmjvkhm'
+
+DEFAULT_FROM_EMAIL = 'Hello<rt23707@gmail.com>'

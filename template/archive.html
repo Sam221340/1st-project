@@ -1,0 +1,4 @@
+{% for month_data in posts_by_month %}
+    <li><a href="#"> {{ month_data.month_name }} {{ month_data.year}} <span>({{ month_data.post_count }})</span></a></li>
+{% endfor %}
+

@@ -4,9 +4,7 @@ from django.contrib import messages
 # from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-# from django.template import context
-# Create your views here.
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.urls import reverse
 # from django.views.generic import TemplateView
 from django.views.generic import UpdateView
@@ -14,10 +12,23 @@ from django.views.generic import UpdateView
 from Blog.forms import PostBlogForm, CommentForm
 from Blog.models import Post, PostComments, Category
 
+# from django.template import context
+# Create your views here.
+
+
 
 def homepage(request):
     post = Post.objects.all()
-    return render(request,'homepage.html',context={'post':post})
+    p = Paginator(post,4)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+    context = {'page_obj': page_obj}
+    return render(request,'homepage.html', context)
 
 def photography(request):
     post = Post.objects.all()

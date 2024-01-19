@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('Blog.urls')),
     path('accounts/',include('accounts.urls')),
+    path('verification/',include('verify_email.urls')),
 ]
 
 urlpatterns += static('media/',document_root=settings.MEDIA_ROOT)
