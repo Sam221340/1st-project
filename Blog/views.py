@@ -1,3 +1,5 @@
+import calendar
+
 from django.contrib import messages
 # from django.contrib.auth import authenticate, login, logout
 # from django.contrib.auth.models import User
@@ -5,6 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from verify_email.email_handler import send_verification_email
 # from django.urls import reverse
 # from django.views.generic import TemplateView
 from django.views.generic import UpdateView
@@ -88,7 +91,7 @@ def like_post(request, pk):
                 pass
             else:
                 post.like_by.add(request.user)
-            return redirect('homepage')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return HttpResponse('You must be logged in to like or dislike the blog')
 
@@ -101,7 +104,7 @@ def dislike_post(request, pk):
             post.like_by.remove(request.user)
         else:
             pass
-        return redirect('homepage')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return HttpResponse('You must be logged in to like or dislike the blog')
 
@@ -151,3 +154,13 @@ def UpdatePost(request, pk):
 def Category(request):
     pass
 
+def november_posts(request):
+    post = Post.objects.filter(created_at__month=11)
+    return render(request,'posts_by_month.html',{'post':post})
+
+
+def posts_by_month(request, month, year):
+    # Filter posts for the specified month and year
+    posts = Post.objects.filter(created_at__month=month, created_at__year=year)
+    print(posts.count)
+    return render(request, 'posts_by_month.html', {'posts': posts})

@@ -24,11 +24,12 @@ register = template.Library()
 @register.inclusion_tag('archive.html')
 def show_archive():
     posts_by_month = []
-    for i in Post.objects.all().values('created_at__month','created_at__year').distinct():
+    for i in Post.objects.all().values('created_at__month', 'created_at__year').distinct():
         month_number = i['created_at__month']
         year = i['created_at__year']
         month_name = calendar.month_name[month_number]
-        post_count = Post.objects.filter(created_at__month=month_number).count()
-        posts_by_month.append({'month_name': month_name, 'year':year, 'post_count': post_count})
+
+        # Add month_number to the dictionary
+        posts_by_month.append({'month': month_number, 'month_name': month_name, 'year': year, 'post_count': Post.objects.filter(created_at__month=month_number, created_at__year=year).count()})
 
     return {'posts_by_month': posts_by_month}
