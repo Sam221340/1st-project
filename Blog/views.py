@@ -151,8 +151,19 @@ def UpdatePost(request, pk):
                 return render(request, 'post_update.html', {'form': form})
 
 
-def Category(request):
-    pass
+def delete_post(request, id):
+    try:
+        post = get_object_or_404(Post, id=id)
+        post.delete()
+        messages.success(request, 'Post deleted successfully.')
+    except Post.DoesNotExist:
+        messages.error(request, 'Post not found.')
+    except ValueError:
+        messages.error(request, 'Invalid post ID.')
+
+    return redirect('homepage')
+
+
 
 def november_posts(request):
     post = Post.objects.filter(created_at__month=11)

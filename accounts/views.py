@@ -111,6 +111,8 @@ def activate(request, uidb64, token):
         return render(request, 'activation_failed.html')
 
 
+
+
 def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -120,13 +122,13 @@ def signin(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, "Logged In Successfully!!")
-            return render(request, "homepage.html")
+            return redirect('homepage')  # Assuming 'homepage' is the name of your homepage URL pattern
         else:
             messages.error(request, 'Invalid username or password')
             return render(request, 'login.html')
 
-    return render(request, "login.html")
+    return render(request, 'login.html')
+
 
 
 
