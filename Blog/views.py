@@ -1,39 +1,58 @@
+import calendar
+
 from django.contrib import messages
 # from django.contrib.auth import authenticate, login, logout
 # from django.contrib.auth.models import User
 # from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-# from django.template import context
-# Create your views here.
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from verify_email.email_handler import send_verification_email
 # from django.urls import reverse
 # from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 
 from Blog.forms import PostBlogForm, CommentForm
-from Blog.models import Post, PostComments
+from Blog.models import Post, PostComments, Category
+
+# from django.template import context
+# Create your views here.
+
 
 
 def homepage(request):
     post = Post.objects.all()
-    return render(request,'homepage.html',context={'post':post})
+    p = Paginator(post,4)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+    context = {'page_obj': page_obj}
+    return render(request,'homepage.html', context)
 
 def photography(request):
-    return render(request,'photography.html')
+    post = Post.objects.all()
+    return render(request,'photography.html',context={'post':post})
 
 def contact(request):
+    # post = Post.objects.all()
     return render(request,'contact.html')
 
 def about(request):
     return render(request,'about.html')
 
 def travel(request):
-    post = Post.objects.all()
+    # post = Post.objects.all()
+    # travel_category = Category.objects.get(name='Travel')
+    post = Post.objects.filter(category__name="Travel")
     return render(request,'travel.html',context={'post':post})
 
 def fashion(request):
-    return render(request,'fashion.html')
+    post = Post.objects.filter(category__name="Fashion")
+    return render(request, 'travel.html', context={'post': post})
 
 
 
@@ -72,7 +91,7 @@ def like_post(request, pk):
                 pass
             else:
                 post.like_by.add(request.user)
-            return redirect('homepage')
+            return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return HttpResponse('You must be logged in to like or dislike the blog')
 
@@ -85,14 +104,14 @@ def dislike_post(request, pk):
             post.like_by.remove(request.user)
         else:
             pass
-        return redirect('homepage')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return HttpResponse('You must be logged in to like or dislike the blog')
 
 
 def post_detail(request, pk):
     form = CommentForm()
-    post_comment = PostComments.objects.filter(post=pkkkk)
+    post_comment = PostComments.objects.filter(post=pk)
 
     try:
         post = Post.objects.get(id=pk)
@@ -132,6 +151,27 @@ def UpdatePost(request, pk):
                 return render(request, 'post_update.html', {'form': form})
 
 
-def Category(request):
-    pass
+def delete_post(request, id):
+    try:
+        post = get_object_or_404(Post, id=id)
+        post.delete()
+        messages.success(request, 'Post deleted successfully.')
+    except Post.DoesNotExist:
+        messages.error(request, 'Post not found.')
+    except ValueError:
+        messages.error(request, 'Invalid post ID.')
 
+    return redirect('homepage')
+
+
+
+def november_posts(request):
+    post = Post.objects.filter(created_at__month=11)
+    return render(request,'posts_by_month.html',{'post':post})
+
+
+def posts_by_month(request, month, year):
+    # Filter posts for the specified month and year
+    posts = Post.objects.filter(created_at__month=month, created_at__year=year)
+    print(posts.count)
+    return render(request, 'posts_by_month.html', {'posts': posts})
