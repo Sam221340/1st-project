@@ -65,12 +65,13 @@ def create_blog(request):
             image = form.cleaned_data['image']
             category = form.cleaned_data['category']
             author_image = form.cleaned_data['author_image']
+            tags = form.cleaned_data['tags']
 
             # Access the current logged-in user
             user = request.user
 
-            Post.objects.create(title=title, description=description, image=image, category_id=category, author=user,author_image=author_image)
-
+            post = Post.objects.create(title=title, description=description, image=image, category_id=category, author=user,author_image=author_image)
+            post.tags.set(tags)
 
             messages.success(request, 'Blog created successfully')
 
@@ -128,7 +129,7 @@ def UpdatePost(request, pk):
         post = get_object_or_404(Post, pk=pk)
         if request.method == 'GET':
             form = PostBlogForm(initial={'title': post.title, 'description': post.description, 'author': post.author,
-                                     'category': post.category,'image':post.image,
+                                     'category': post.category,'image':post.image,'tags':post.tags,
                                      'author_image': post.author_image, 'tags': post.tags.all()})
             return render(request, 'update_post.html', {'form': form})
         elif request.method == 'POST':
@@ -144,6 +145,8 @@ def UpdatePost(request, pk):
                 post.category.id = form.cleaned_data['category']
                 post.image = form.cleaned_data['image']
                 post.author_image = form.cleaned_data['author_image']
+                selected_tags = form.cleaned_data['tags']
+                post.tags.set(selected_tags)
                 post.save()
 
                 return redirect('homepage')
